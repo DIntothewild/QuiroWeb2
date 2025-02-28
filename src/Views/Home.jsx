@@ -65,7 +65,7 @@ const Home = () => {
           </Grid>
         ))}
       </Grid>
-      <BookingComponent terapias={terapias} />
+   {/*    <BookingComponent terapias={terapias} /> */}
       <Footer />
       <DateTimeModal open={open} handleClose={handleClose} terapia={selectedTerapia} />
     </>

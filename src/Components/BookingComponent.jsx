@@ -35,7 +35,19 @@ const BookingComponent = ({ terapias }) => {
     }
   };
 
-  return null 
+  return (
+    <div>
+      <h2>Gestionar Reservas</h2>
+      {terapias.map((t) => (
+        <div key={t._id} style={{ border: "1px solid gray", margin: "10px" }}>
+          <p>{t.name}</p>
+          <button onClick={() => console.log("Reservar", t.name)}>Reservar</button>
+          <button onClick={() => console.log("Cancelar", t.name)}>Cancelar</button>
+        </div>
+      ))}
+    </div>
+  );
+
 };
 
 export default BookingComponent;

@@ -17,7 +17,7 @@ export function createTerapias(
   };
 }
 
-export async function bookTerapias(terapias, date, name) {
+/* export async function bookTerapias(terapias, date, name) {
   try {
     if (!terapias || !terapias.name) {
       throw new Error(
@@ -49,6 +49,36 @@ export async function bookTerapias(terapias, date, name) {
 
     const data = await response.json();
     console.log("Reserva realizada con éxito:", data);
+  } catch (error) {
+    console.error("Error al reservar el terapia:", error);
+  }
+} */
+
+export async function bookTerapias(terapias, date, name) {
+  try {
+    if (!terapias || !terapias.name) {
+      throw new Error(
+        "El objeto del terapia no está definido o falta el nombre."
+      );
+    }
+
+    const requestBody = {
+      customerName: name,
+      terapiasType: terapias.name, // Ajusta según tu backend
+      date: date.split(" ")[0],
+      time: date.split(" ")[1],
+      status: "booked",
+    };
+
+    console.log("Datos enviados:", requestBody);
+
+    // En lugar de fetch, usa axios.post
+    const response = await axios.post(
+      "http://localhost:3000/bookings",
+      requestBody
+    );
+
+    console.log("Reserva realizada con éxito:", response.data);
   } catch (error) {
     console.error("Error al reservar el terapia:", error);
   }

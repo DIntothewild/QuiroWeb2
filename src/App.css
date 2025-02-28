@@ -1,29 +1,34 @@
 /* src/App.css */
 
+/* Reinicio básico */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: pink;
+  font-family: Arial, sans-serif;
 }
 
+/* Contenedor principal de la App */
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* Encabezado */
 .App-header {
   background-color: #3f51b5;
   color: white;
   padding: 20px;
   text-align: center;
+  position: relative;
+  z-index: 9999; /* Asegura que el header esté encima de otros elementos */
 }
 
 .App-header h1 {
   margin: 0;
 }
 
+/* Navegación dentro del header */
 nav ul {
   list-style-type: none;
   padding: 0;
@@ -46,17 +51,18 @@ nav ul li a:hover {
   text-decoration: underline;
 }
 
+/* Contenido principal */
 main {
   flex: 1;
   padding: 20px;
 }
 
+/* Footer */
 footer {
   background-color: #333;
   color: white;
   text-align: center;
   padding: 10px;
-  /* position: absolute; */
   bottom: 0;
   width: 100%;
 }
@@ -64,30 +70,28 @@ footer {
 footer p {
   margin: 0;
 }
-/* Estilos para el modal */
+
+/* Modal base */
 .modal {
-  display: block; /* Mostrar el modal */
-  position: fixed; /* Modal posicionado fijo */
-  z-index: 1; /* Encima de todo */
+  display: block;
+  position: fixed;
+  z-index: 10000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Desplazamiento si el contenido es largo */
-  background-color: rgb(0,0,0); /* Fondo oscuro */
-  background-color: rgba(0,0,0,0.4); /* Fondo oscuro con transparencia */
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
 }
 
-/* Contenido del modal */
 .modal-content {
-  background-color: #fefefe; /* Fondo blanco */
-  margin: 15% auto; /* 15% desde arriba y centrado horizontalmente */
+  background-color: #fefefe;
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Ancho del contenido del modal */
+  width: 80%;
 }
 
-/* Estilo para el botón de cerrar (x) */
 .close {
   color: #aaaaaa;
   float: right;
@@ -98,6 +102,5 @@ footer p {
 .close:hover,
 .close:focus {
   color: #000;
-  text-decoration: none;
   cursor: pointer;
 }

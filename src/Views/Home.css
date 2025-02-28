@@ -1,112 +1,100 @@
+/* src/Home.css */
+
+/* Contenedor principal de la Home */
 .home-container {
-    padding: 20px;
+  padding: 20px;
 }
 
-.terapias-section {
-    position: relative;
-    overflow: hidden;
-    height: 450px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Cada tarjeta de terapia */
+.terapia-section {
+  position: relative;
+  overflow: hidden;
+  height: 450px; /* Ajusta la altura a tu gusto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px; /* Separación vertical */
 }
 
+/* Efecto hover */
+.terapia-section:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Imagen de fondo de cada terapia */
 .background-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(50%); /* Para hacer la imagen más oscura */
-    position: absolute;
-    top: 0;
-    left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(50%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 15px 15px 0 0;
 }
 
+/* Capa superior donde va el texto y botones */
 .overlay {
-    position: relative;
-    color: white;
-    text-align: center;
-    z-index: 1;
+  position: relative;
+  color: white;
+  text-align: center;
+  z-index: 2; /* Por encima de la imagen */
 }
 
 .title {
-    font-size: 3em;
-    font-weight: bold;
+  font-size: 3em;
+  font-weight: bold;
 }
 
 .description {
-    font-size: 1.5em;
-    margin: 20px 0;
+  font-size: 1.5em;
+  margin: 20px 0;
 }
 
 .actions {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .actions button {
-    margin: 0 10px;
+  margin: 0 10px;
 }
 
-.app-header {
-    background: linear-gradient(135deg, #4a90e2, #50e3c2); /* Degradado moderno */
-    color: white;
-    text-align: center;
-    padding: 20px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    border-bottom: 2px solid #50e3c2;
-  }
-
-  /* En Home.css */
-.terapias-section {
-    border-radius: 15px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    overflow: hidden; /* Asegura que las imágenes no sobresalgan */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación */
-  }
-  
-  .terapias-section:hover {
-    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más marcada */
-  }
-  
-  .background-image {
-    border-radius: 15px 15px 0 0; /* Redondea solo la parte superior */
-  }
-
-  /* En Home.css */
+/* Footer oscuro (también en App.css si prefieres) */
 footer {
-    background: #2c2c2c; /* Fondo oscuro */
-    color: #f2f2f2; /* Texto claro */
-    padding: 20px;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  footer a {
-    color: #50e3c2; /* Color destacado */
-    margin: 0 10px;
-    text-decoration: none;
-  }
-  
-  footer a:hover {
-    text-decoration: underline;
-  }
-  
-  footer .social-icons {
-    margin-top: 10px;
-  }
-  
-  footer .social-icons i {
-    font-size: 20px;
-    margin: 0 10px;
-    color: #50e3c2;
-    transition: color 0.3s ease;
-  }
-  
-  footer .social-icons i:hover {
-    color: white;
-  }
+  background: #2c2c2c;
+  color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
 
-  
+footer a {
+  color: #50e3c2;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer .social-icons {
+  margin-top: 10px;
+}
+
+footer .social-icons i {
+  font-size: 20px;
+  margin: 0 10px;
+  color: #50e3c2;
+  transition: color 0.3s ease;
+}
+
+footer .social-icons i:hover {
+  color: white;
+}
