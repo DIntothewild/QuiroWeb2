@@ -7,7 +7,7 @@ import Footer from '../Components/Footer';
 import { bookTerapias, cancelBookedTerapias } from '../Components/BookingFunctions';
 import './Home.css';
 import DateTimeModal from '../Components/DateTimeModal';
-import BookingComponent from '../Components/BookingComponent';
+/* import BookingComponent from '../Components/BookingComponent'; */
 
 const Home = () => {
   const [open, setOpen] = useState(false);
