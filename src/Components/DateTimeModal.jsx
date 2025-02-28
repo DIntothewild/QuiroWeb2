@@ -1,3 +1,4 @@
+// 1. Importaciones y definiciones
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -6,7 +7,10 @@ import {
   TextField,
   Button,
   Select,
-  MenuItem
+  MenuItem,
+  FormGroup,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,12 +18,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { bookTerapias, fetchReservedTimes } from './BookingFunctions';
 
 const availableTimes = [
-  '08:00', '09:00', '10:00', '11:00', '12:00',
-  '13:00', '14:00', '15:00', '16:00', '17:00'
+  '08:00','09:00','10:00','11:00','12:00',
+  '13:00','14:00','15:00','16:00','17:00'
 ];
 
-const DateTimeModal = ({ open, handleClose, terapias }) => {
-  // ESTADOS EXISTENTES
+const DateTimeModal = ({ open, handleClose, terapia }) => {
+  // ESTADOS
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(availableTimes[0]);
   const [name, setName] = useState('');
@@ -27,14 +31,26 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [reservedTimes, setReservedTimes] = useState({});
 
-  // NUEVOS ESTADOS
+  // Para "Quiromasaje"
   const [tipoMasaje, setTipoMasaje] = useState('relajante');
   const [comentario, setComentario] = useState('');
 
+  //Para Osteopatia
+  const [zonaTratar, setZonaTratar] = useState("");
+  const [osteoComentario, setosteoComentario] = useState(""); 
+
+  // Para "Entrenamiento personal"
+  const [perderPeso, setPerderPeso] = useState(false);
+  const [ganarMusculo, setGanarMusculo] = useState(false);
+  const [ponermeEnForma, setPonermeEnForma] = useState(false);
+  const [recuperarmeLesion, setRecuperarmeLesion] = useState(false);
+  const [comentarioEntrenamiento, setComentarioEntrenamiento] = useState('');
+
+
+  // CARGA de reservas
   useEffect(() => {
     const loadReservedTimes = async () => {
       try {
-        // Suponiendo que fetchReservedTimes devuelve [{ date: '2024-09-22', time: '08:00' }]
         const bookings = await fetchReservedTimes();
         const timesByDate = bookings.reduce((acc, booking) => {
           const { date, time } = booking;
@@ -50,20 +66,38 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
     loadReservedTimes();
   }, []);
 
+  // MANEJADOR DE FECHA
   const handleDateChange = (newValue) => {
     setSelectedDate(newValue);
     setSelectedTime(availableTimes[0]);
   };
 
+  // MANEJADOR DE CONFIRMAR
   const handleConfirm = async () => {
     try {
       const formattedDate = selectedDate.format('YYYY-MM-DD');
       const dateTime = `${formattedDate} ${selectedTime}`;
 
-      await bookTerapias(terapias, dateTime, name, tipoMasaje, comentario);
+      // Llama a bookTerapias con distintos campos según la terapia
+      if (terapia?.name === "Quiromasaje") {
+        await bookTerapias(terapia, dateTime, name, tipoMasaje, comentario);
+      } else if (terapia?.name === "Entrenamiento personal") {
+        await bookTerapias(terapia, dateTime, name, {
+          perderPeso,
+          ganarMusculo,
+          ponermeEnForma,
+          recuperarmeLesion,
+          comentarioEntrenamiento
+        });
+      } else if (terapia?.name === "Osteopatía") {
+        await bookTerapias (terapia, dateTime, name, zonaTratar, osteoComentario);
+        // Otras terapias sin campos extra
+        await bookTerapias(terapia, dateTime, name);
+      }
+
       setConfirmationMessage(`${name}, tu reserva ha sido realizada con éxito para el ${dateTime}`);
 
-      // Actualiza las horas reservadas para la fecha seleccionada
+      // Actualiza horas reservadas
       setReservedTimes({
         ...reservedTimes,
         [formattedDate]: [...(reservedTimes[formattedDate] || []), selectedTime]
@@ -74,34 +108,152 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
       setSelectedTime(availableTimes[0]);
       setTipoMasaje('relajante');
       setComentario('');
+      setPerderPeso(false);
+      setGanarMusculo(false);
+      setPonermeEnForma(false);
+      setRecuperarmeLesion(false);
+      setComentarioEntrenamiento('');
+      setosteoComentario("");
 
       handleClose();
       setConfirmationModalOpen(true);
     } catch (error) {
       console.error('Error al reservar el terapia:', error);
-      setConfirmationMessage(`Error al reservar el terapia: ${error.message}`);
+      setConfirmationMessage(`Error al reservar: ${error.message}`);
       setConfirmationModalOpen(true);
     }
   };
 
+  // Filtra horas
   const filteredTimes = selectedDate
     ? availableTimes.filter(
         time => !(reservedTimes[selectedDate.format('YYYY-MM-DD')] || []).includes(time)
       )
     : availableTimes;
 
+  // **Campos extras** según la terapia
+  let extraFields = null;
+  if (terapia?.name === "Quiromasaje") {
+    extraFields = (
+      <>
+        <Typography variant="h6" sx={{ mt: 2 }}>Tipo de masaje</Typography>
+        <Select
+          value={tipoMasaje}
+          onChange={(e) => setTipoMasaje(e.target.value)}
+          fullWidth
+        >
+          <MenuItem value="relajante">Relajante</MenuItem>
+          <MenuItem value="lesiones">Lesiones</MenuItem>
+          <MenuItem value="espalda">Espalda</MenuItem>
+          <MenuItem value="piernas">Piernas</MenuItem>
+          <MenuItem value="otra">Otra parte del cuerpo</MenuItem>
+        </Select>
+
+        <Typography variant="h6" sx={{ mt: 2 }}>Comentarios</Typography>
+        <TextField
+          multiline
+          rows={3}
+          value={comentario}
+          onChange={(e) => setComentario(e.target.value)}
+          fullWidth
+        />
+      </>
+    );
+  } else if (terapia?.name === "Entrenamiento personal") {
+    extraFields = (
+      <>
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          ¿Cuál es tu objetivo con el entrenamiento?
+        </Typography>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={perderPeso}
+                onChange={(e) => setPerderPeso(e.target.checked)}
+              />
+            }
+            label="Perder peso"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={ganarMusculo}
+                onChange={(e) => setGanarMusculo(e.target.checked)}
+              />
+            }
+            label="Ganar músculo"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={ponermeEnForma}
+                onChange={(e) => setPonermeEnForma(e.target.checked)}
+              />
+            }
+            label="Ponerme en forma"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={recuperarmeLesion}
+                onChange={(e) => setRecuperarmeLesion(e.target.checked)}
+              />
+            }
+            label="Recuperarme de una lesión"
+          />
+        </FormGroup>
+
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Comentarios
+        </Typography>
+        <TextField
+          multiline
+          rows={3}
+          value={comentarioEntrenamiento}
+          onChange={(e) => setComentarioEntrenamiento(e.target.value)}
+          fullWidth
+        />
+      </>
+    ); 
+  }  else if (terapia?.name === "Osteopatía") {
+    extraFields = (
+      <>
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Zona a tratar
+        </Typography>
+        <TextField
+          placeholder="Ej: Cervical, lumbar..."
+          value={zonaTratar}
+          onChange={(e) => setZonaTratar(e.target.value)}
+          fullWidth
+        />
+        
+        <Typography variant="h6" sx={{ mt: 2 }}>Comentarios</Typography>
+        <TextField
+          multiline
+          rows={3}
+          value={comentario}
+          onChange={(e) => setComentario(e.target.value)}
+          fullWidth
+        />
+        {/* Más campos si quieres */}
+      </>
+    );
+  }
+
+  // RENDER
   return (
     <>
       {/* MODAL PRINCIPAL */}
       <Modal
         open={open}
         onClose={handleClose}
-        // Estilos con sx para evitar conflictos con clases
         sx={{
           display: 'flex',
-          alignItems: 'flex-start', // Aparece cerca de la parte superior
+          alignItems: 'flex-start',
           justifyContent: 'center',
-          marginTop: '10%',         // Separa del header
+          marginTop: '10%',
           zIndex: 99999
         }}
       >
@@ -115,53 +267,20 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
             width: '80%'
           }}
         >
-          {/* Nombre */}
-          {/* <TextField
-            label="Nombre"
-            InputLabelProps={{ shrink: true }}
+          {/* Campo Nombre */}
+          <Typography variant="h6">Nombre</Typography>
+          <TextField
+            placeholder="Tu nombre"
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
-          /> */}
-          <Typography variant="h6">Nombre</Typography>
-<TextField
-  placeholder="Ingresa tu nombre"
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-  fullWidth
-/>
-
-          {/* Tipo de masaje */}
-          <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
-            Tipo de masaje
-          </Typography>
-          <Select
-            value={tipoMasaje}
-            onChange={(e) => setTipoMasaje(e.target.value)}
-            fullWidth
-          >
-            <MenuItem value="relajante">Relajante</MenuItem>
-            <MenuItem value="lesiones">Lesiones</MenuItem>
-            <MenuItem value="espalda">Espalda</MenuItem>
-            <MenuItem value="piernas">Piernas</MenuItem>
-            <MenuItem value="otra">Otra parte del cuerpo</MenuItem>
-          </Select>
-
-          {/* Comentarios */}
-          <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
-            Comentarios
-          </Typography>
-          <TextField
-            label="Coméntanos aspectos importantes..."
-            multiline
-            rows={3}
-            value={comentario}
-            onChange={(e) => setComentario(e.target.value)}
-            fullWidth
           />
 
+          {/* Campos específicos */}
+          {extraFields}
+
           {/* Fecha */}
-          <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
+          <Typography variant="h6" sx={{ mt: 2 }}>
             Selecciona Fecha
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -174,7 +293,7 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
           </LocalizationProvider>
 
           {/* Hora */}
-          <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
+          <Typography variant="h6" sx={{ mt: 2 }}>
             Selecciona Hora
           </Typography>
           <Select
@@ -188,11 +307,7 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
           </Select>
 
           {/* Botón Reservar */}
-          <Button
-            sx={{ mt: 2 }}
-            onClick={handleConfirm}
-            variant="contained"
-          >
+          <Button sx={{ mt: 2 }} onClick={handleConfirm} variant="contained">
             Reservar
           </Button>
         </Box>
@@ -221,13 +336,12 @@ const DateTimeModal = ({ open, handleClose, terapias }) => {
               width: '80%'
             }}
           >
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6">
               {confirmationMessage}
             </Typography>
             <Button
               onClick={() => setConfirmationModalOpen(false)}
               variant="contained"
-              color="primary"
               sx={{ mt: 2 }}
             >
               Cerrar

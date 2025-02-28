@@ -7,15 +7,17 @@ import Footer from '../Components/Footer';
 import { bookTerapias, cancelBookedTerapias } from '../Components/BookingFunctions';
 import './Home.css';
 import DateTimeModal from '../Components/DateTimeModal';
-/* import BookingComponent from '../Components/BookingComponent'; */
+// import BookingComponent from '../Components/BookingComponent';
 
 const Home = () => {
+  // ESTADOS
   const [open, setOpen] = useState(false);
   const [selectedTerapia, setSelectedTerapia] = useState(null);
   const [terapias, setTerapias] = useState([]);
 
+  // EFECTO para cargar terapias de la BD
   useEffect(() => {
-    axios.get("http://localhost:3000/terapias")  
+    axios.get("http://localhost:3000/terapias")
       .then(response => {
         console.log("🔍 Terapias recibidas:", response.data);
         setTerapias(response.data);
@@ -23,6 +25,7 @@ const Home = () => {
       .catch(error => console.error("❌ Error al obtener terapias:", error));
   }, []);
 
+  // MANEJADORES DE MODAL
   const handleOpen = (terapia) => {
     setSelectedTerapia(terapia);
     setOpen(true);
@@ -32,35 +35,43 @@ const Home = () => {
     setOpen(false);
     setSelectedTerapia(null);
   };
-// Después de setTerapias(response.data), define el orden deseado
-const desiredOrder = [
-  "Quiromasaje",
-  "Osteopatía",
-  "Entrenamiento personal",
-  "Consulta nutricional",
-  "Naturopatía",
-  "Eventos"
-];
 
-// Ordena las terapias según desiredOrder
-const sortedTherapias = [...terapias].sort((a, b) => {
-  return desiredOrder.indexOf(a.name) - desiredOrder.indexOf(b.name);
-});
+  // ORDEN PERSONALIZADO DE TERAPIAS
+  const desiredOrder = [
+    "Quiromasaje",
+    "Osteopatía",
+    "Entrenamiento personal",
+    "Consulta nutricional",
+    "Naturopatía",
+    "Eventos"
+  ];
 
+  // ORDENAR LAS TERAPIAS SEGÚN desiredOrder
+  const sortedTherapias = [...terapias].sort((a, b) => {
+    return desiredOrder.indexOf(a.name) - desiredOrder.indexOf(b.name);
+  });
+
+  // RENDER
   return (
     <>
       <Grid container className="home-container" spacing={3}>
         {sortedTherapias.map((terapia) => (
           <Grid item xs={12} sm={6} key={terapia._id}>
             <div className="terapia-section">
-              <img 
-                src={`/images/${terapia.backgroundImage.includes('.') ? terapia.backgroundImage : terapia.backgroundImage + ".jpg"}`}  
-                alt={terapia.name}  
-                className="background-image" 
-                onError={(e) => e.target.src = "/images/events.jpeg"} 
+              <img
+                src={`/images/${
+                  terapia.backgroundImage.includes('.')
+                    ? terapia.backgroundImage
+                    : terapia.backgroundImage + ".jpg"
+                }`}
+                alt={terapia.name}
+                className="background-image"
+                onError={(e) => e.target.src = "/images/events.jpeg"}
               />
               <div className="overlay">
-                <Typography className="title" variant="h2">{terapia.name}</Typography>
+                <Typography className="title" variant="h2">
+                  {terapia.name}
+                </Typography>
                 <Typography className="description" variant="body1">
                   {terapia.description || "Descripción no disponible"}
                 </Typography>
@@ -79,9 +90,15 @@ const sortedTherapias = [...terapias].sort((a, b) => {
           </Grid>
         ))}
       </Grid>
-   {/*    <BookingComponent terapias={terapias} /> */}
+
       <Footer />
-      <DateTimeModal open={open} handleClose={handleClose} terapia={selectedTerapia} />
+
+      {/* MODAL PARA FECHA/HORA */}
+      <DateTimeModal
+        open={open}
+        handleClose={handleClose}
+        terapia={selectedTerapia} // Se pasa la terapia en singular
+      />
     </>
   );
 };
