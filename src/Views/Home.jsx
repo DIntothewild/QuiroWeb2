@@ -32,11 +32,25 @@ const Home = () => {
     setOpen(false);
     setSelectedTerapia(null);
   };
+// Después de setTerapias(response.data), define el orden deseado
+const desiredOrder = [
+  "Quiromasaje",
+  "Osteopatía",
+  "Entrenamiento personal",
+  "Consulta nutricional",
+  "Naturopatía",
+  "Eventos"
+];
+
+// Ordena las terapias según desiredOrder
+const sortedTherapias = [...terapias].sort((a, b) => {
+  return desiredOrder.indexOf(a.name) - desiredOrder.indexOf(b.name);
+});
 
   return (
     <>
       <Grid container className="home-container" spacing={3}>
-        {terapias.map((terapia) => (
+        {sortedTherapias.map((terapia) => (
           <Grid item xs={12} sm={6} key={terapia._id}>
             <div className="terapia-section">
               <img 
