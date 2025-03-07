@@ -75,6 +75,29 @@ const Home = () => {
                 <Typography className="description" variant="body1">
                   {terapia.description || "Descripción no disponible"}
                 </Typography>
+                
+                {/* Mostrar el tipo de masaje si es Quiromasaje */}
+                {terapia.type === "quiromasaje" && terapia.tipoDeMasaje && (
+                  <Typography variant="body1"><strong>Tipo de Masaje:</strong> {terapia.tipoDeMasaje}</Typography>
+                )}
+                
+                {/* Mostrar la zona del cuerpo si es Osteopatía */}
+                {terapia.type === "osteopatia" && terapia.zonaDelCuerpo && (
+                  <Typography variant="body1"><strong>Zona del Cuerpo a Tratar:</strong> {terapia.zonaDelCuerpo}</Typography>
+                )}
+
+                {/* Mostrar comentarios si existen */}
+                {terapia.comentarios && terapia.comentarios.length > 0 && (
+                  <div>
+                    <Typography variant="h6">Comentarios:</Typography>
+                    <ul>
+                      {terapia.comentarios.map((comentario, index) => (
+                        <li key={index}>{comentario}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
                 <div className="actions">
                   <Button variant="contained" onClick={() => handleOpen(terapia)}>
                     {terapia.isBooked ? 'Reservado' : 'Reservar'}
