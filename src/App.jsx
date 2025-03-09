@@ -10,11 +10,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <h1>NATURALMENTE (Wellness Flow)</h1>
-          <h2>Un enfoque en el cuidado natural y el equilibrio personal.</h2>
-          <h3>Booking site</h3>
-        </header>
+         <header className="App-header">
+          <h1>TOTEM SALUD (Wellness Flow)</h1>
+           <h2>Un enfoque en el cuidado natural y el equilibrio personal.</h2> 
+          <h1>Booking site</h1>
+        </header> 
         <main>
           <Routes>
             <Route path="/" element={<Home />} />

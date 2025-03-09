@@ -1,39 +1,39 @@
 import React from 'react';
-import './Footer.css'; // Asegúrate de tener este archivo de estilos
+import './Footer.css';
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h3>Sobre Nosotros</h3>
-          <p>
-            Somos un centro de terapias dedicado a brindar bienestar y relajación. 
-            Nuestro equipo profesional está listo para ofrecerte una experiencia única.
-          </p>
+          <h2>Sobre Nosotros</h2>
+          <p>Somos un centro de terapias dedicado a brindar bienestar y relajación.</p>
         </div>
+
         <div className="footer-section">
-          <h3>Contacto</h3>
+          <h2>Contacto</h2>
           <p>Email: <a href="mailto:info@miempresa.com">info@miempresa.com</a></p>
           <p>Teléfono: +34 123 456 789</p>
         </div>
+
         <div className="footer-section">
-          <h3>Síguenos</h3>
-          <div className="social-media">
+          <h2>Síguenos</h2>
+          <div className="social-icons">
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-              Facebook
+              <i className="fab fa-facebook"></i>
             </a>
             <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-              Instagram
+              <i className="fab fa-instagram"></i>
             </a>
-            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-              Twitter
+            <a href="https://wa.me/34123456789" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-whatsapp"></i>
             </a>
           </div>
         </div>
       </div>
+
       <div className="footer-bottom">
-        <p>&copy; 2024 Mi Empresa de Terapias. Todos los derechos reservados.</p>
+        © 2024 Mi Empresa de Terapias. Todos los derechos reservados.
       </div>
     </footer>
   );

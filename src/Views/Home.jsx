@@ -7,7 +7,6 @@ import Footer from '../Components/Footer';
 import { bookTerapias, cancelBookedTerapias } from '../Components/BookingFunctions';
 import './Home.css';
 import DateTimeModal from '../Components/DateTimeModal';
-// import BookingComponent from '../Components/BookingComponent';
 
 const Home = () => {
   // ESTADOS
@@ -54,6 +53,7 @@ const Home = () => {
   // RENDER
   return (
     <>
+      {/* Contenedor con la clase home-container para el fondo difuminado */}
       <Grid container className="home-container" spacing={3}>
         {sortedTherapias.map((terapia) => (
           <Grid item xs={12} sm={6} key={terapia._id}>
@@ -75,15 +75,19 @@ const Home = () => {
                 <Typography className="description" variant="body1">
                   {terapia.description || "Descripción no disponible"}
                 </Typography>
-                
+
                 {/* Mostrar el tipo de masaje si es Quiromasaje */}
                 {terapia.type === "quiromasaje" && terapia.tipoDeMasaje && (
-                  <Typography variant="body1"><strong>Tipo de Masaje:</strong> {terapia.tipoDeMasaje}</Typography>
+                  <Typography variant="body1">
+                    <strong>Tipo de Masaje:</strong> {terapia.tipoDeMasaje}
+                  </Typography>
                 )}
-                
+
                 {/* Mostrar la zona del cuerpo si es Osteopatía */}
                 {terapia.type === "osteopatia" && terapia.zonaDelCuerpo && (
-                  <Typography variant="body1"><strong>Zona del Cuerpo a Tratar:</strong> {terapia.zonaDelCuerpo}</Typography>
+                  <Typography variant="body1">
+                    <strong>Zona del Cuerpo a Tratar:</strong> {terapia.zonaDelCuerpo}
+                  </Typography>
                 )}
 
                 {/* Mostrar comentarios si existen */}
@@ -97,7 +101,7 @@ const Home = () => {
                     </ul>
                   </div>
                 )}
-                
+
                 <div className="actions">
                   <Button variant="contained" onClick={() => handleOpen(terapia)}>
                     {terapia.isBooked ? 'Reservado' : 'Reservar'}
